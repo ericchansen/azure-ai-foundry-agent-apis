@@ -102,7 +102,7 @@ python examples/03_tracing_and_metrics.py
 
 ### 4. Evaluations ([`examples/04_evaluations.py`](examples/04_evaluations.py))
 
-Create and run evaluations with built-in evaluators (coherence, task adherence, safety), retrieve scores.
+Create and run evaluations using the OpenAI Evals API (`score_model` evaluator), upload test data, poll for completion, retrieve per-item scores.
 
 ```bash
 python examples/04_evaluations.py
@@ -138,13 +138,20 @@ When tracing is enabled, these attributes appear in Application Insights and can
 | `gen_ai.operation.name` | `invoke_agent`, `chat`, `execute_tool` |
 | `gen_ai.response.finish_reasons` | `["stop"]`, `["error"]`, etc. |
 
-## Built-in Evaluators
+## Evaluators
 
-| Category | Evaluators |
+The OpenAI Evals API surface supports these evaluator types:
+
+| Type | Purpose |
 |---|---|
-| **Agent** | `builtin.task_adherence`, `builtin.intent_resolution`, `builtin.tool_call_accuracy` |
-| **Quality** | `builtin.coherence`, `builtin.relevance`, `builtin.fluency`, `builtin.groundedness`, `builtin.f1_score` |
-| **Safety** | `builtin.violence`, `builtin.self_harm`, `builtin.sexual`, `builtin.hate_unfairness` |
+| `score_model` | LLM-as-judge scoring (1–5 scale, custom prompt) — **tested in this repo** |
+| `label_model` | LLM-as-judge classification (pass/fail, custom labels) |
+| `text_similarity` | Fuzzy text matching |
+| `string_check` | Exact/substring match |
+| `python` | Custom Python evaluation function |
+| `endpoint` | Call an external evaluation endpoint |
+
+> **Note:** The Azure-specific `azure_ai_evaluator` type (`builtin.coherence`, `builtin.task_adherence`, etc.) is available via the Foundry portal and [Azure AI Evaluation SDK](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/cloud-evaluation), but is not supported on the OpenAI Evals REST surface as of `2025-04-01-preview`.
 
 ## RBAC Requirements
 
